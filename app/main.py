@@ -1,8 +1,6 @@
-import time
-
 from kivy.config import Config
-
 # Set the desired window size (width x height)
+# This should be on top of other imports, in order to take efect.
 Config.set('graphics', 'width', '1550')
 Config.set('graphics', 'height', '800')
 
@@ -11,7 +9,7 @@ from kivymd.uix.datatables import MDDataTable
 from kivy.metrics import dp
 from kivy.lang import Builder
 from kivymd.uix.dialog import MDDialog
-from kivy.properties import ObjectProperty, StringProperty
+from kivy.properties import ObjectProperty
 from kivymd.uix.pickers import MDDatePicker
 from kivymd.app import MDApp
 from kivymd.uix.scrollview import MDScrollView
@@ -296,8 +294,6 @@ class AnalyticsScreen(MDScreen):
         self.ids.analysis_dropdown.text = "Select Type"
         self.ids.item_dropdown.text = 'Select Item'
 
-
-
         if 'Product' in self.dropdown_selection_1:
 
             current_item = [res for res in self.data if res[1] == self.dropdown_selection_2][0][2]
@@ -312,15 +308,13 @@ class AnalyticsScreen(MDScreen):
 
         result_current, result_last, figure = analytics.generate_result(params)
 
-        # result_current.append(('Sales', 'Date'))
-        # result_last.append(('Sales', 'Date'))
 
         column_data = [('Sales', dp(30)), ('Date', dp(30))]
         row_data_current = [tuple(map(str, row)) for row in result_current]
         row_data_last = [tuple(map(str, row)) for row in result_last]
 
         table_1 = MDDataTable(
-            pos_hint={'center_x': 0.5, 'center_y': 0.5},  # Center the table
+            pos_hint={'center_x': 0.5, 'center_y': 0.5},
             column_data=column_data,
             row_data=row_data_current,
             use_pagination=True,
@@ -328,7 +322,7 @@ class AnalyticsScreen(MDScreen):
         )
 
         table_2 = MDDataTable(
-            pos_hint={'center_x': 0.5, 'center_y': 0.5},  # Center the table
+            pos_hint={'center_x': 0.5, 'center_y': 0.5},
             column_data=column_data,
             row_data=row_data_last,
             use_pagination=True,
@@ -343,9 +337,6 @@ class AnalyticsScreen(MDScreen):
 
         self.ids.a_table_container_last.clear_widgets()
         self.ids.a_table_container_last.add_widget(table_2)
-
-
-
 
     def generate_data(self, start_date, end_date):
         if not self.dates:

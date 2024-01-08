@@ -1,16 +1,13 @@
 import os
 
 from data.database.database_utils import create_connection
-from data.database.create_database import db_file_name, path_to_db_file
+from data.database.create_database import DATABASE_NAME
 
 
 # Connector class with methods to create cursor, connection and execute SQL queries
 class Connector:
-    DATABASE_LOCATION = path_to_db_file
-    DATABASE_NAME = db_file_name
-
     def __init__(self):
-        self.connection = create_connection('db.sqlite3')
+        self.connection = create_connection()
         self.cursor = self.connection.cursor()
 
     def close_connection(self):
@@ -98,7 +95,6 @@ class DataExtractor:
         result = self.connector.fetch_result(query, (year,))
         return result
 
-
     def determine_current_date(self):
         query = '''
             SELECT order_date 
@@ -135,7 +131,6 @@ class DataExtractor:
         # Fetch and return the result
         result = self.connector.fetch_result(query, params)
         return result
-
 
     def customer_count_for_period(self, start_date, end_date):
         query = '''
@@ -294,4 +289,3 @@ class QueryGenerator:
         self.initiate_query()
 
         return result
-
