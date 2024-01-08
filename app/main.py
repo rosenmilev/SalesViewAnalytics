@@ -6,27 +6,17 @@ from kivy.config import Config
 Config.set('graphics', 'width', '1550')
 Config.set('graphics', 'height', '800')
 
-from kivy.core.window import Window
 from kivymd.uix.button import MDFlatButton
-from kivy.clock import Clock
-from kivy.uix.popup import Popup
-from kivy.uix.filechooser import FileChooserListView
-from kivymd.uix.boxlayout import MDBoxLayout
-from kivymd.uix.selectioncontrol import MDCheckbox
 from kivymd.uix.datatables import MDDataTable
 from kivy.metrics import dp
-from kivy.app import App
 from kivy.lang import Builder
 from kivymd.uix.dialog import MDDialog
 from kivy.properties import ObjectProperty, StringProperty
-from kivy.uix.floatlayout import FloatLayout
-from kivymd.uix.label import MDLabel
 from kivymd.uix.pickers import MDDatePicker
 from kivymd.app import MDApp
 from kivymd.uix.scrollview import MDScrollView
 from kivymd.uix.menu import MDDropdownMenu
 from kivymd.uix.screen import MDScreen
-from kivymd.uix.navigationdrawer import MDNavigationLayout, MDNavigationDrawer
 from kivy.garden.matplotlib import FigureCanvasKivyAgg
 from kivymd.uix.card import MDCard
 from visualisations.visualisation_manager import Visualisations
@@ -38,6 +28,7 @@ import subprocess
 from datetime import datetime
 import logging
 
+
 logging.getLogger('matplotlib').setLevel(logging.WARNING)
 
 
@@ -48,15 +39,18 @@ class PlotCard(MDCard):
         self.add_widget(canvas)
 
 
+# Custom widget for dashboard cards
 class DashboardCard(MDCard):
     pass
 
 
+# Custom widget for navigation menu for switching between screens
 class ContentNavigationDrawer(MDScrollView):
     screen_manager = ObjectProperty()
     nav_drawer = ObjectProperty()
 
 
+# Main Kivy App - It has 3 screens
 class SalesViewAnalytics(MDApp):
     def build(self):
         self.theme_cls.primary_palette = "BlueGray"
@@ -64,6 +58,7 @@ class SalesViewAnalytics(MDApp):
         return Builder.load_file('main.kv')
 
 
+# Generate all the dynamic widgets and their properties for Dashboard Screen
 class DashboardScreen(MDScreen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -86,8 +81,10 @@ class DashboardScreen(MDScreen):
         self.ids.daily_info.average_sales_client = f'{self.data_provider.current_month_average_sales_by_client}'
         self.ids.daily_info.average_sales_order = f'{self.data_provider.current_month_average_sales_by_order}'
         self.ids.daily_info.number_of_clients = f'{self.data_provider.current_month_customer_count}'
+        self.ids.daily_info.number_of_orders = f'{self.data_provider.current_month_orders_count}'
 
 
+# Generate all the dynamic widgets and their properties for Report Screen
 class ReportsScreen(MDScreen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -154,10 +151,9 @@ class ReportsScreen(MDScreen):
         self.dialog.dismiss()
 
     def open_exported_file(self, *args):
-        # Open the file and close the dialog
         if os.name == 'nt':  # for Windows
             os.startfile(self.exported_file_path)
-        else:  # for MacOS and Linux
+        else:
             opener = 'open' if os.name == 'mac' else 'xdg-open'
             subprocess.call([opener, self.exported_file_path])
         self.dialog.dismiss()
@@ -206,6 +202,7 @@ class ReportsScreen(MDScreen):
         self.ids.table_container.add_widget(self.table)
 
 
+# Generate all the dynamic widgets and their properties for Analytics Screen
 class AnalyticsScreen(MDScreen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -302,9 +299,9 @@ class AnalyticsScreen(MDScreen):
 
 
         if 'Product' in self.dropdown_selection_1:
-            print(self.data)
+
             current_item = [res for res in self.data if res[1] == self.dropdown_selection_2][0][2]
-            print(current_item)
+
             params = (self.dates[0], self.dates[1], 'od.product_id', current_item)
         elif 'Segment' in self.dropdown_selection_1:
             current_item = [res for res in self.data if res[1] == self.dropdown_selection_2][0][1]
@@ -315,9 +312,8 @@ class AnalyticsScreen(MDScreen):
 
         result_current, result_last, figure = analytics.generate_result(params)
 
-
-        result_current.append(('Sales', 'Date'))
-        result_last.append(('Sales', 'Date'))
+        # result_current.append(('Sales', 'Date'))
+        # result_last.append(('Sales', 'Date'))
 
         column_data = [('Sales', dp(30)), ('Date', dp(30))]
         row_data_current = [tuple(map(str, row)) for row in result_current]
@@ -339,13 +335,8 @@ class AnalyticsScreen(MDScreen):
             rows_num=10
         )
 
-        if figure:
-            plot_card = PlotCard()
-            plot_card.add_plot(figure)
-            self.ids.a_plot_card.add_widget(plot_card)
-
-
-
+        self.ids.a_plot.clear_widgets()
+        self.ids.a_plot.add_plot(figure)
 
         self.ids.a_table_container_current.clear_widgets()
         self.ids.a_table_container_current.add_widget(table_1)
@@ -399,10 +390,6 @@ class AnalyticsScreen(MDScreen):
 
         date_dialog.bind(on_save=self.on_save, on_cancel=self.on_cancel)
         date_dialog.open()
-
-
-class ExternalDataScreen(MDScreen):
-    pass
 
 
 if __name__ == '__main__':

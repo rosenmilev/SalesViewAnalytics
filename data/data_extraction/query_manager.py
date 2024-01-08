@@ -1,12 +1,16 @@
+import os
+
 from data.database.database_utils import create_connection
+from data.database.create_database import db_file_name, path_to_db_file
 
 
+# Connector class with methods to create cursor, connection and execute SQL queries
 class Connector:
-
-    DATABASE_LOCATION = '../database/db.sqlite3'
+    DATABASE_LOCATION = path_to_db_file
+    DATABASE_NAME = db_file_name
 
     def __init__(self):
-        self.connection = create_connection(Connector.DATABASE_LOCATION)
+        self.connection = create_connection('db.sqlite3')
         self.cursor = self.connection.cursor()
 
     def close_connection(self):
@@ -18,20 +22,13 @@ class Connector:
         return self.cursor.fetchall()
 
 
+# DataExtractor class which uses Connector class for database access, and generates and executes special SQL queries,
+# needed to provide data to Reports(), Analytics() and Visualisation()
 class DataExtractor:
     def __init__(self):
         self.connector = Connector()
         self.connection = self.connector.connection
         self.cursor = self.connection.cursor()
-
-    #
-    # def close_connection(self):
-    #     self.cursor.close()
-    #     self.connection.close()
-    #
-    # def fetch_result(self, sql, params=None):
-    #     self.cursor.execute(sql, params or ())
-    #     return self.cursor.fetchall()
 
     def top_ten_customers(self, year):
         query = '''
@@ -172,6 +169,8 @@ class DataExtractor:
         return result
 
 
+# QueryGenerator uses different class variables to generate dynamic SQL queries for different scenarios. Used mostly
+# for Reports Screen.
 class QueryGenerator:
     def __init__(self):
         self.connector = Connector()
@@ -194,7 +193,6 @@ class QueryGenerator:
         self.group_by_clause = ''
         self.order_by_clause = 'ORDER BY order_date'
         self.include_product = False
-
 
     def set_date_range(self, start_date, end_date):
         # Set the date range for the WHERE clause, but don't include the dates in the SELECT clause
@@ -290,17 +288,10 @@ class QueryGenerator:
         if self.group_by_clause:
             query += ' ' + self.group_by_clause
         query += ' ' + self.order_by_clause
-        print(query)
-        # Execute the query and fetch results
-        rows = self.connector.fetch_result(query)
 
-        # Prepend the manually constructed column names
+        rows = self.connector.fetch_result(query)
         result = [column_names] + rows
         self.initiate_query()
 
         return result
-
-
-
-
 

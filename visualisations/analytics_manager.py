@@ -16,6 +16,7 @@ class Reports:
         self.current_month_customer_count = ''
         self.current_month_average_sales_by_client = ''
         self.current_month_average_sales_by_order = ''
+        self.current_month_orders_count = ''
 
         # Update all the variables with latest data
         self.generate_dashboard_info()
@@ -65,22 +66,25 @@ class Reports:
         self.current_date = self.data_extractor.determine_current_date()[0][0]
         current_year, current_month, current_day = self.current_date.split("-")
         self.first_day_of_current_month = f"{current_year}-{current_month}-01"
+        self.current_month_orders_count = self.data_extractor.order_count_for_period(self.first_day_of_current_month, self.current_date)[0][0]
         self.current_month_today_sales = self.data_extractor.sales_for_period(self.current_date, self.current_date)[0][0]
         self.current_month_sales = self.data_extractor.sales_for_period(self.first_day_of_current_month, self.current_date)[0][0]
         self.current_month_customer_count = self.data_extractor.customer_count_for_period(self.first_day_of_current_month, self.current_date)[0][0]
         self.current_month_average_sales_by_client = round(self.current_month_sales / self.current_month_customer_count, 2)
-        self.current_month_average_sales_by_order = round(self.current_month_sales / self.data_extractor.order_count_for_period(self.first_day_of_current_month, self.current_date)[0][0])
+        self.current_month_average_sales_by_order = round(self.current_month_sales / float(self.current_month_orders_count))
+
 
         return self.current_date
 
 
+# Class Analytics uses DataExtractor class for custom SQL Queries and Visualisations class for creating plots.
 class Analytics:
     def __init__(self):
         self.data_extractor = DataExtractor()
         self.visualisations = Visualisations()
         self.data_provider = reports
 
-    # start_date, end_date, selection_type, selection
+    # Params- start_date, end_date, selection_type, selection
     def generate_result(self, params):
         result_current = self.data_extractor.daily_sales(params[0], params[1], params[2], params[3])
         start_date_last_year = params[0].replace('2018', '2017')
@@ -105,8 +109,6 @@ class Analytics:
                                                        (start_date_last_year, end_date_last_year))
 
         return result_current, result_last, figure
-
-
 
 
 reports = Reports()

@@ -42,7 +42,6 @@ class CleanData:
             self.format_column_name()
 
     # What percent of data is missing and deside if the dataset is suitable for analysis.
-    # TODO implement logic not to accept datasets with more than 30% missing values.
     def calculate_missing_values_percentage(self):
         total_cells = self.dataframe.shape[0] * self.dataframe.shape[1]
         print(total_cells)
@@ -53,7 +52,6 @@ class CleanData:
 
     # Depending on the importance and type of missing values, handle them by removing the row with missing value,
     # or fill it with the most common value for that column.
-    # TODO Think how to provide to user decision how to handle missing values and which columns to drop.
     def handling_missing_values(self):
         # Handle the critical columns by deleting the rows with missing data.
         self.dataframe = self.dataframe.dropna(subset=self.critical_columns).copy()

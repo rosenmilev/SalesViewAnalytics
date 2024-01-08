@@ -28,13 +28,6 @@
             IconLeftWidget:
                 icon: "chart-pie"
 
-        OneLineIconListItem:
-            text: "External Data"
-            on_press:
-                root.nav_drawer.set_state("close")
-                root.screen_manager.current = "external_data"
-            IconLeftWidget:
-                icon: "web"
 
 <PlotCard>:
     card_title: ''
@@ -158,7 +151,7 @@
                 DashboardCard:
                     id: daily_info
                     size_hint: None, None
-                    size: "400dp", "280dp"
+                    size: "400dp", "350dp"
 
             GridLayout:
                 cols: 3  # Three cards in one row
@@ -184,84 +177,113 @@
 
 
 <AnalyticsScreen>:
+
+
+
+    BoxLayout:
+        orientation: 'horizontal'
+        MDCard:
+            card_title: ''
+            orientation: "horizontal"
+            padding: "8dp"
+            size_hint: None, None
+            size: "900dp", "45dp"
+            pos_hint: {"center_x": 0.7, "center_y": 0.95}
+            spacing: dp(10)
+            md_bg_color: 143/255, 192/255, 199/255, 1
+
+            MDLabel:
+                text: "Analysis Settings"
+                size_hint_x: None
+                width: self.width
+
+
+
+            MDRaisedButton:
+                id: a_date_picker
+                padding: '8dp'
+                text: "Select Period"
+                pos_hint: {"center_x": .5, "center_y": .5}
+                on_release: root.show_date_picker()
+
+
+            MDRaisedButton:
+                id: analysis_dropdown
+                padding: '8dp'
+                text: "Select Type"
+                pos_hint: {"center_x": .6, "center_y": .5}
+                on_release: root.menu_1.open()
+
+
+            MDRaisedButton:
+                id: item_dropdown
+                padding: '8dp'
+                text: "Select Item"
+                pos_hint: {"center_x": .6, "center_y": .5}
+                on_release: root.menu_2.open()
+                opacity: 0
+                disabled: True
+
+            Widget:
+                size_hint_x: None
+            Widget:
+                size_hint_x: None
+            MDRaisedButton:
+                id: generate_button
+                pos_hint: {"center_x": .9, "center_y": .5}
+                text: "Generate"
+                on_release: root.generate_result()
+
+
+
     GridLayout:
-        rows:3
+        cols: 3
+        id: bottom_part
+        spacing: '8dp'  # Adjust spacing between children
+
+        BoxLayout:
+            size_hint_x: 0.33
+            MDCard:
+                md_bg_color: 175/255, 202/255, 206/255, 1
+                pos_hint: {"center_x": .5, "center_y": .5}
+                id: a_table_container_current
+                padding: '8dp'
+
+
+
+                size_hint_y: "0.8dp"# Ensure the height matches the plot card
+
+        BoxLayout:
+            size_hint_x: 0.33
+            MDCard:
+                md_bg_color: 175/255, 202/255, 206/255, 1
+                pos_hint: {"center_x": .5, "center_y": .5}
+                id: a_table_container_last
+                padding: '8dp'
+
+
+
+                size_hint_y: "0.8dp"
+
 
 
         BoxLayout:
-            orientation: 'horizontal'
-            MDCard:
-                card_title: ''
-                orientation: "horizontal"
-                padding: "8dp"
-                size_hint: None, None
-                size: "900dp", "45dp"
-                pos_hint: {"center_x": 0.7, "center_y": 0.95}
-                spacing: dp(10)
+            id: a_plot_card
+
+            size_hint_x: 0.33
+
+
+            md_bg_color: 175/255, 202/255, 206/255, 1
+
+
+            PlotCard:
+
+                size_hint_x: 0.33
+                size_hint_y: None
+                size_hint_y: "0.8dp"
                 md_bg_color: 175/255, 202/255, 206/255, 1
+                id: a_plot
 
-                MDLabel:
-                    text: "Analysis Settings"
-                    size_hint_x: None
-                    width: self.width
-
-
-
-                MDRaisedButton:
-                    id: a_date_picker
-                    padding: '8dp'
-                    text: "Select Period"
-                    pos_hint: {"center_x": .5, "center_y": .5}
-                    on_release: root.show_date_picker()
-
-
-                MDRaisedButton:
-                    id: analysis_dropdown
-                    padding: '8dp'
-                    text: "Select Type"
-                    pos_hint: {"center_x": .6, "center_y": .5}
-                    on_release: root.menu_1.open()
-
-
-                MDRaisedButton:
-                    id: item_dropdown
-                    padding: '8dp'
-                    text: "Select Item"
-                    pos_hint: {"center_x": .6, "center_y": .5}
-                    on_release: root.menu_2.open()
-                    opacity: 0
-                    disabled: True
-
-                Widget:
-                    size_hint_x: None
-                Widget:
-                    size_hint_x: None
-                MDRaisedButton:
-                    id: generate_button
-                    pos_hint: {"center_y": .5}
-                    text: "Generate"
-                    on_release: root.generate_result()
-
-
-
-        GridLayout:
-            cols:3
-            id: bottom_part
-
-            BoxLayout:
-                id: a_table_container_current
-                size_hint: 0.33, 1
-
-            BoxLayout:
-                id: a_table_container_last
-                size_hint: 0.33, 1
-
-            BoxLayout:
-                id: a_plot_card
-                size_hint: 0.33, 1
-                PlotCard:
-                    id: a_plot
-                    md_bg_color: 0, 0, 0, 0
 
 
 <ReportsScreen>:
@@ -273,9 +295,9 @@
             orientation: "horizontal"
             padding: "8dp"
             size_hint: None, None
-            size: "950dp", "45dp"
+            size: "1100dp", "45dp"
             pos_hint: {"center_x": 0.7, "center_y": 0.95}
-            md_bg_color: 175/255, 202/255, 206/255, 1
+            md_bg_color: 143/255, 192/255, 199/255, 1
 
             MDLabel:
                 text: "Report Settings"
@@ -355,7 +377,7 @@
 MDScreen:
     canvas:
         Color:
-            rgba: 225/255, 237/255, 240/255, 1
+            rgba: 175/255, 202/255, 206/255, 1
         Rectangle:
             size: self.size
             pos: self.pos
@@ -367,6 +389,7 @@ MDScreen:
             elevation: 4
             title: "Sales View Analytics"
             left_action_items: [["menu", lambda x: nav_drawer.set_state("open")]]
+
 
         MDNavigationLayout:
             pos_hint: {"top": 1}  # Ensure it fills the screen vertically
@@ -387,10 +410,6 @@ MDScreen:
                 AnalyticsScreen:
                     name: "analytics"
                     text: '3'
-
-                ExternalDataScreen:
-                    name: "external_data"
-                    text: '4'
 
             MDNavigationDrawer:
                 id: nav_drawer

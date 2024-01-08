@@ -5,8 +5,12 @@ from data.database.data_import import clean_data
 from data.database.database_utils import create_connection, create_table, insert_data_into_table
 
 
-# Using normalized database schema
-def main(name_of_db_file):
+# Using normalized database schema to create and fill the tables, based on dataset format.
+def main(name_of_db_file, path_to_db_file):
+    db_file_path = os.path.join(path_to_db_file, name_of_db_file)
+    if os.path.exists(db_file_path):
+        print("Database already exists. Skipping creation.")
+        return
     customers_table_sql = '''CREATE TABLE IF NOT EXISTS customers (
     customer_id TEXT PRIMARY KEY,
     customer_name TEXT NOT NULL,
@@ -45,7 +49,7 @@ def main(name_of_db_file):
 
     # Create table, filter df for each table, insert the data
 
-    connection = create_connection(name_of_db_file)
+    connection = create_connection(name_of_db_file, path_to_db_file)
     create_table(connection, customers_table_sql)
     create_table(connection, products_table_sql)
     create_table(connection, sales_transactions_table_sql)
@@ -81,5 +85,8 @@ def main(name_of_db_file):
         connection.close()
 
 
-if __name__ == "__main__":
-    main("db.sqlite3")
+path_to_db_file = '/home/traxx90/PycharmProjects/SalesViewAnalytics/app/data/db.sqlite3'
+db_file_name = "db.sqlite3"
+
+# if __name__ == "__main__":
+#     main(db_file_name, path_to_db_file)

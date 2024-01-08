@@ -3,7 +3,13 @@ import numpy as np
 from data.data_extraction.query_manager import DataExtractor
 
 
-# This class takes data from Analytics class as data_prover, and visualise the information.
+#   This class takes data from Analytics class as data_prover, and visualise the information.
+#   It has several basic methods:
+# - create figure: create custom unified matplotlib figure for the different plots and charts.
+# - top_ten plot: creates bar chart with top ten items, dynamically passed to the method.
+# - draw_line_chart: create line charts
+# - Methods, starting with vis_ create the nessecery visualisation for the GUI app, based on provided data from other
+# classes from analytics_manager.py and query_manager.
 class Visualisations:
     def __init__(self):
         self.data_provider = DataExtractor()
@@ -41,7 +47,8 @@ class Visualisations:
         for bar in bars:
             width = bar.get_width()
             label_x_pos = width if width < ax.get_xlim()[1] * 0.05 else width - (ax.get_xlim()[1] * 0.02)
-            ax.text(label_x_pos, bar.get_y() + bar.get_height() / 2, f'{int(width)}', ha='center' if width < ax.get_xlim()[1] * 0.05 else 'right', va='center', color='black')
+            ax.text(label_x_pos, bar.get_y() + bar.get_height() / 2, f'{int(width)}',
+                    ha='center' if width < ax.get_xlim()[1] * 0.05 else 'right', va='center', color='black')
 
         ax.set_xlabel(x_label)
         ax.set_ylabel(y_label)
@@ -73,7 +80,6 @@ class Visualisations:
     def vis_sales_by_category(self, year='2018'):
         data = self.data_provider.segment_sales(year)
         print(data)
-        # 'data' is expected to be a dictionary like {'Consumer': 15000, 'Corporate': 10000, 'Home Office': 5000}
 
         labels, sizes = self.separate_data(data)
         total = sum(sizes)
@@ -171,7 +177,7 @@ class Visualisations:
 
         # Creating the bar chart
         fig, ax = self.create_figure()
-        bars = ax.bar(labels, values, color=[self.color_scheme_bars['bars'],'#cb416b'])
+        bars = ax.bar(labels, values, color=[self.color_scheme_bars['bars'], '#cb416b'])
 
         # Adding the value labels to the bars
         for bar, value in zip(bars, values):
@@ -183,7 +189,7 @@ class Visualisations:
         ax.text(0.5, max_height, f'Percentage Difference: {percentage_diff:.2f}%\n'
                                  f'Total Sales From {current_dates[0]} To {current_dates[1]}: {current_value}'
                                  f'\nTotal Sales From {last_dates[0]} To {last_dates[1]}: {last_value}',
-                                ha='center', va='bottom', fontsize=12, color='black')
+                ha='center', va='bottom', fontsize=12, color='black')
 
         ax.set_title(f'{name} Comparison')
         ax.set_ylabel('Values')
