@@ -1,4 +1,4 @@
-db.sqlite3
+data/database/db.sqlite3
 
 .log
 .DS_Store

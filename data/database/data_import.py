@@ -83,6 +83,7 @@ class CleanData:
                     self.dataframe[col] = pd.to_datetime(self.dataframe[col], format='%d/%m/%Y', errors='coerce').dt.strftime('%Y-%m-%d')
                 elif data_type in ['float64', 'int32']:
                     self.dataframe[col] = pd.to_numeric(self.dataframe[col], errors='coerce')
+                    print(self.dataframe[col])
                 elif data_type == 'str':
                     self.dataframe[col] = self.dataframe[col].astype(str)
                 # No need to use copy() here since direct assignment is being used
@@ -102,9 +103,10 @@ class CleanData:
         self.dataframe.columns = self.dataframe.columns.str.lower().str.replace('[^a-zA-Z0-9]', '_', regex=True)
 
 
+def clean_data():
+    data = read_data('datasets/sales_dataset.csv')
+    cleaner = CleanData(data)
+    cleaner.main()
+    cleaned_data = cleaner.dataframe
+    return cleaned_data
 
-data = read_data('sales_dataset.csv')
-cleaner = CleanData(data)
-cleaner.main()
-cleaned_data = cleaner.dataframe
-cleaned_data.to_csv('sales_dataset_cleaned.csv', index=False)
