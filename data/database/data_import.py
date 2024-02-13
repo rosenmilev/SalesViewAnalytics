@@ -10,7 +10,6 @@ def read_data(file_path):
 class CleanData:
     def __init__(self, dataframe):
         self.dataframe = dataframe.copy()
-        # TODO Move setting of these values outside class dynamically.
         self.rows_dropped = 0
         self.critical_columns = ['Order ID', 'City', 'State', 'Postal Code', 'Product ID', 'Sales', 'Country',
                                  'Order Date', 'Ship Date', 'Customer ID', 'Customer Name', 'Product Name']
