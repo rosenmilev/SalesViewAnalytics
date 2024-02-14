@@ -28,6 +28,14 @@
             IconLeftWidget:
                 icon: "chart-pie"
 
+        OneLineIconListItem:
+            text: "Forecasts"
+            on_press:
+                root.nav_drawer.set_state("close")
+                root.screen_manager.current = "forecast"
+            IconLeftWidget:
+                icon: "chart-pie"
+
 
 <PlotCard>:
     card_title: ''
@@ -373,6 +381,11 @@
         opacity: 0
         disabled: True
 
+<ForecastScreen>
+    BoxLayout:
+        id: table_container
+
+
 
 MDScreen:
     canvas:
@@ -410,6 +423,9 @@ MDScreen:
                 AnalyticsScreen:
                     name: "analytics"
                     text: '3'
+                ForecastScreen:
+                    name: "forecast"
+                    text: '4'
 
             MDNavigationDrawer:
                 id: nav_drawer

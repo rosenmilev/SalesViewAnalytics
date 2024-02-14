@@ -383,5 +383,9 @@ class AnalyticsScreen(MDScreen):
         date_dialog.open()
 
 
+class ForecastScreen:
+    pass
+
+
 if __name__ == '__main__':
     SalesViewAnalytics().run()
