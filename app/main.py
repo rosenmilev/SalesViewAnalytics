@@ -383,7 +383,7 @@ class AnalyticsScreen(MDScreen):
         date_dialog.open()
 
 
-class ForecastScreen:
+class ForecastScreen(MDScreen):
     pass
 
 
