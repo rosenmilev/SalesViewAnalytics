@@ -183,7 +183,7 @@ class QueryGenerator:
         self.base_query = '''SELECT {} FROM sales_transactions 
                            JOIN customers ON sales_transactions.customer_id = customers.customer_id 
                            JOIN order_details ON sales_transactions.order_id = order_details.order_id'''
-        self.select_clause = ''  # Start with an empty select clause
+        self.select_clause = ''
         self.where_clause = ''
         self.group_by_clause = ''
         self.order_by_clause = 'ORDER BY order_date'

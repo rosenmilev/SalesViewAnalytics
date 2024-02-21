@@ -384,30 +384,20 @@
 <ForecastScreen>:
     BoxLayout:
         orientation: 'horizontal'
+
         MDCard:
             card_title: ''
             orientation: "horizontal"
             padding: "8dp"
             size_hint: None, None
-            size: "900dp", "45dp"
+            size: "1100dp", "45dp"
             pos_hint: {"center_x": 0.7, "center_y": 0.95}
-            spacing: dp(10)
             md_bg_color: 143/255, 192/255, 199/255, 1
 
             MDLabel:
-                text: "Analysis Settings"
+                text: "Forecast settings"
                 size_hint_x: None
                 width: self.width
-
-
-
-            MDRaisedButton:
-                id: a_date_picker
-                padding: '8dp'
-                text: "Select Period"
-                pos_hint: {"center_x": .5, "center_y": .5}
-                on_release: root.show_date_picker()
-
 
             MDRaisedButton:
                 id: analysis_dropdown
@@ -416,25 +406,13 @@
                 pos_hint: {"center_x": .6, "center_y": .5}
                 on_release: root.menu_1.open()
 
-
             MDRaisedButton:
-                id: item_dropdown
+                id: analysis_dropdown
                 padding: '8dp'
-                text: "Select Item"
+                text: "Select item"
                 pos_hint: {"center_x": .6, "center_y": .5}
-                on_release: root.menu_2.open()
-                opacity: 0
-                disabled: True
+                on_release: root.menu_1.open()
 
-            Widget:
-                size_hint_x: None
-            Widget:
-                size_hint_x: None
-            MDRaisedButton:
-                id: generate_button
-                pos_hint: {"center_x": .9, "center_y": .5}
-                text: "Generate"
-                on_release: root.generate_result()
 
 MDScreen:
     canvas:
